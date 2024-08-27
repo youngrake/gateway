@@ -25,6 +25,7 @@ import { OsmosisConfig } from '../chains/osmosis/osmosis.config';
 import { CarbonConfig } from './carbon/carbon.config';
 import { BalancerConfig } from './balancer/balancer.config';
 import { OrcaConfig } from './orca/orca.config';
+import { RaydiumConfig } from './raydium/raydium.config';
 
 export namespace ConnectorsRoutes {
   export const router = Router();
@@ -45,7 +46,7 @@ export namespace ConnectorsRoutes {
             trading_type: UniswapConfig.config.tradingTypes('LP'),
             chain_type: UniswapConfig.config.chainType,
             available_networks: JSON.parse(
-              JSON.stringify(UniswapConfig.config.availableNetworks)
+              JSON.stringify(UniswapConfig.config.availableNetworks),
             ),
             additional_spenders: ['uniswap'],
           },
@@ -190,8 +191,14 @@ export namespace ConnectorsRoutes {
             chain_type: OrcaConfig.config.chainType,
             available_networks: OrcaConfig.config.availableNetworks,
           },
+          {
+            name: 'raydium',
+            trading_type: RaydiumConfig.config.tradingTypes('swap'),
+            chain_type: RaydiumConfig.config.chainType,
+            available_networks: RaydiumConfig.config.availableNetworks,
+          },
         ],
       });
-    })
+    }),
   );
 }

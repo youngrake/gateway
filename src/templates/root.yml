@@ -147,3 +147,7 @@ configurations:
   $namespace orca:
     configurationPath: orca.yml
     schemaPath: orca-schema.json
+
+  $namespace raydium:
+    configurationPath: raydium.yml
+    schemaPath: raydium-schema.json
