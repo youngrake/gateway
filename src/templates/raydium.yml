@@ -1,0 +1,8 @@
+allowedSlippage: '1/100'
+
+# Here we use stable swap.
+contractAddresses:
+  mainnet:
+    routerAddress: '05quBtoiQqxF9Jv6KYKctB59NT3gtJD2Y65kdnB1Uev3h'
+  devnet:
+    routerAddress: 'DDg4VmQaJV9ogWce7LpcjBA9bv22wRp5uaTPa5pGjijF'
