@@ -90,7 +90,7 @@ export async function getStatus(
 
     const celoConnections = Celo.getConnectedInstances();
     connections = connections.concat(
-      celoConnections ? Object.values(celoConnections) : []
+      celoConnections ? Object.values(celoConnections) : [],
     );
 
     const nearConnections = Near.getConnectedInstances();
@@ -130,7 +130,7 @@ export async function getStatus(
 
     const solanaConnections = Solana.getConnectedInstances();
     connections = connections.concat(
-      solanaConnections ? Object.values(solanaConnections) : []
+      solanaConnections ? Object.values(solanaConnections) : [],
     );
   }
 

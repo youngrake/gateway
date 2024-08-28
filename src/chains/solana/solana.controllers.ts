@@ -22,12 +22,12 @@ import {
 
 const toSolanaBalances = (
   balances: Record<string, TokenValue>,
-  tokenSymbols: string[]
+  tokenSymbols: string[],
 ): Record<string, string> => {
   let filteredBalancesKeys = Object.keys(balances);
   if (tokenSymbols.length) {
     filteredBalancesKeys = filteredBalancesKeys.filter((symbol) =>
-      tokenSymbols.includes(symbol)
+      tokenSymbols.includes(symbol),
     );
   }
 
@@ -45,7 +45,7 @@ const toSolanaBalances = (
 export class SolanaController {
   static async balances(
     solanaish: Solanaish,
-    req: SolanaBalanceRequest
+    req: SolanaBalanceRequest,
   ): Promise<SolanaBalanceResponse | string> {
     if (req.tokenSymbols.find((symbol) => symbol === 'PERP'))
       req.tokenSymbols.push('USDC');
@@ -57,7 +57,7 @@ export class SolanaController {
       throw new HttpException(
         500,
         LOAD_WALLET_ERROR_MESSAGE + err,
-        LOAD_WALLET_ERROR_CODE
+        LOAD_WALLET_ERROR_CODE,
       );
     }
 
@@ -80,12 +80,12 @@ export class SolanaController {
   // TODO: make the response conform to HB standard
   static async poll(
     solanaish: Solanaish,
-    req: SolanaPollRequest
+    req: SolanaPollRequest,
   ): Promise<SolanaPollResponse> {
     const initTime = Date.now();
     const currentBlock = await solanaish.getCurrentBlockNumber();
     const txData = getNotNullOrThrowError<TransactionResponse>(
-      await solanaish.getTransaction(req.txHash)
+      await solanaish.getTransaction(req.txHash),
     );
     const txStatus = await solanaish.getTransactionStatusCode(txData);
 
@@ -104,7 +104,7 @@ export class SolanaController {
   // TODO: make the response conform to HB standard
   static async getTokens(
     solanaish: Solanaish,
-    req: SolanaTokenRequest
+    req: SolanaTokenRequest,
   ): Promise<SolanaTokenResponse> {
     const initTime = Date.now();
     const tokenInfo = solanaish.getTokenForSymbol(req.token);
@@ -112,7 +112,7 @@ export class SolanaController {
       throw new HttpException(
         500,
         TOKEN_NOT_SUPPORTED_ERROR_MESSAGE + req.token,
-        TOKEN_NOT_SUPPORTED_ERROR_CODE
+        TOKEN_NOT_SUPPORTED_ERROR_CODE,
       );
     }
 
@@ -123,7 +123,7 @@ export class SolanaController {
     let amount;
     try {
       amount = tokenValueToString(
-        await solanaish.getSplBalance(walletAddress, mintAddress)
+        await solanaish.getSplBalance(walletAddress, mintAddress),
       );
     } catch (err) {
       amount = null;
@@ -142,7 +142,7 @@ export class SolanaController {
   // TODO: Review this function as it is not needed now
   static async getOrCreateTokenAccount(
     solanaish: Solanaish,
-    req: SolanaTokenRequest
+    req: SolanaTokenRequest,
   ): Promise<SolanaTokenResponse> {
     const initTime = Date.now();
     const tokenInfo = solanaish.getTokenForSymbol(req.token);
@@ -150,14 +150,14 @@ export class SolanaController {
       throw new HttpException(
         500,
         TOKEN_NOT_SUPPORTED_ERROR_MESSAGE + req.token,
-        TOKEN_NOT_SUPPORTED_ERROR_CODE
+        TOKEN_NOT_SUPPORTED_ERROR_CODE,
       );
     }
     const wallet = await solanaish.getKeypair(req.address);
     const mintAddress = new PublicKey(tokenInfo.address);
     const account = await solanaish.getOrCreateAssociatedTokenAccount(
       wallet,
-      mintAddress
+      mintAddress,
     );
 
     let amount;
