@@ -25,6 +25,7 @@ import { OsmosisConfig } from '../chains/osmosis/osmosis.config';
 import { CarbonConfig } from './carbon/carbon.config';
 import { BalancerConfig } from './balancer/balancer.config';
 import { OrcaConfig } from './orca/orca.config';
+import { JupiterConfig } from './jupiter/jupiter.config';
 
 export namespace ConnectorsRoutes {
   export const router = Router();
@@ -189,6 +190,12 @@ export namespace ConnectorsRoutes {
             trading_type: OrcaConfig.config.tradingTypes('LP'),
             chain_type: OrcaConfig.config.chainType,
             available_networks: OrcaConfig.config.availableNetworks,
+          },
+          {
+            name: 'jupiter',
+            trading_type: JupiterConfig.config.tradingTypes('LP'),
+            chain_type: JupiterConfig.config.chainType,
+            available_networks: JupiterConfig.config.availableNetworks,
           },
         ],
       });

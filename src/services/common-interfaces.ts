@@ -841,3 +841,17 @@ export interface OrcaLPish {
    * @param wallet Wallet for the transaction
    */
 }
+
+export interface JupiterLPish {
+  init(): Promise<void>;
+
+  ready(): boolean;
+
+  getPositions(): Promise<PositionInfo>;
+
+  /**
+   * Given a wallet, get a list of its positions.
+   *
+   * @param wallet Wallet for the transaction
+   */
+}

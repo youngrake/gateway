@@ -31,6 +31,7 @@ import {
   Xdcish,
   Tezosish,
   OrcaLPish,
+  JupiterLPish
 } from './common-interfaces';
 import { Traderjoe } from '../connectors/traderjoe/traderjoe';
 import { Sushiswap } from '../connectors/sushiswap/sushiswap';
@@ -50,6 +51,7 @@ import { XRPLCLOB } from '../connectors/xrpl/xrpl';
 import { Carbonamm } from '../connectors/carbon/carbonAMM';
 import { Balancer } from '../connectors/balancer/balancer';
 import { Orca } from '../connectors/orca/orca.lp';
+import { Jupiter } from '../connectors/jupiter/jupiter';
 
 export type ChainUnion =
   | Algorand
@@ -173,6 +175,7 @@ export type ConnectorUnion =
   | Curve
   | KujiraCLOB
   | OrcaLPish
+  | JupiterLPish
 
 export type Connector<T> = T extends Uniswapish
   ? Uniswapish
@@ -194,7 +197,9 @@ export type Connector<T> = T extends Uniswapish
                   ? KujiraCLOB
                     : T extends OrcaLPish
                     ? OrcaLPish
-                      : never;
+                      : T extends JupiterLPish
+                      ? JupiterLPish
+                        : never;
 
 export async function getConnector<T>(
   chain: string,
@@ -250,6 +255,8 @@ export async function getConnector<T>(
     connectorInstance = Plenty.getInstance(network);
   } else if (connector === 'orca') {
     connectorInstance = Orca.getInstance(chain, network);
+  } else if (connector === 'jupiter') {
+    connectorInstance = Jupiter.getInstance(chain, network);
   } else {
     throw new Error('unsupported chain or connector');
   }

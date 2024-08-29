@@ -147,3 +147,7 @@ configurations:
   $namespace orca:
     configurationPath: orca.yml
     schemaPath: orca-schema.json
+
+  $namespace jupiter:
+    configurationPath: jupiter.yml
+    schemaPath: jupiter-schema.json
