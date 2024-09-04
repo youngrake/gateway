@@ -155,6 +155,10 @@ export class Solana implements Solanaish {
     return this._lamportPrice;
   }
 
+  public get lamportDecimals(): number {
+    return this._lamportDecimals;
+  }
+
   // solana token lists are large. instead of reloading each time with
   // getTokenList, we can read the stored tokenList value from when the
   // object was initiated.

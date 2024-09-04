@@ -50,6 +50,7 @@ import { XRPLCLOB } from '../connectors/xrpl/xrpl';
 import { Carbonamm } from '../connectors/carbon/carbonAMM';
 import { Balancer } from '../connectors/balancer/balancer';
 import { Orca } from '../connectors/orca/orca.lp';
+import { Raydium } from '../connectors/raydium/raydium';
 
 export type ChainUnion =
   | Algorand
@@ -81,9 +82,9 @@ export type Chain<T> = T extends Algorand
                 ? KujiraCLOB
                 : T extends Osmosis
                   ? Osmosis
-                    : T extends Solana
+                  : T extends Solana
                     ? Solana
-                      : never;
+                    : never;
 
 export class UnsupportedChainException extends Error {
   constructor(message?: string) {
@@ -173,6 +174,7 @@ export type ConnectorUnion =
   | Curve
   | KujiraCLOB
   | OrcaLPish
+  | Raydium;
 
 export type Connector<T> = T extends Uniswapish
   ? Uniswapish
@@ -188,12 +190,14 @@ export type Connector<T> = T extends Uniswapish
             ? Tinyman
             : T extends Plenty
               ? Plenty
-              : T extends XRPLish
-                ? XRPLCLOB
-                : T extends KujiraCLOB
-                  ? KujiraCLOB
+              : T extends Raydium
+                ? Raydium
+                : T extends XRPLish
+                  ? XRPLCLOB
+                  : T extends KujiraCLOB
+                    ? KujiraCLOB
                     : T extends OrcaLPish
-                    ? OrcaLPish
+                      ? OrcaLPish
                       : never;
 
 export async function getConnector<T>(
@@ -250,6 +254,8 @@ export async function getConnector<T>(
     connectorInstance = Plenty.getInstance(network);
   } else if (connector === 'orca') {
     connectorInstance = Orca.getInstance(chain, network);
+  } else if (connector === 'raydium') {
+    connectorInstance = Raydium.getInstance(chain, network);
   } else {
     throw new Error('unsupported chain or connector');
   }

@@ -91,4 +91,17 @@ export class Raydium {
       'Encountered a malformed percent string in the config for ALLOWED_SLIPPAGE.',
     );
   }
+
+  estimateSellTrade(): Promise<any> {
+    return Promise.resolve({});
+  }
+
+  estimateBuyTrade(): Promise<any> {
+    return Promise.resolve({});
+  }
+
+  // https://github.com/raydium-io/raydium-sdk-V2-demo/blob/master/src/amm/swap.ts#L67
+  executeTrade(): Promise<any> {
+    return Promise.resolve({});
+  }
 }
