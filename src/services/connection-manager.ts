@@ -103,6 +103,7 @@ export async function getInitializedChain<T>(
   chain: string,
   network: string,
 ): Promise<Chain<T>> {
+  console.log('getInitializedChain', chain, network)
   const chainInstance = await getChainInstance(chain, network);
 
   if (chainInstance === undefined) {
@@ -208,6 +209,8 @@ export async function getConnector<T>(
   address?: string,
 ): Promise<Connector<T>> {
   let connectorInstance: ConnectorUnion;
+
+  console.log('getConnector', chain)
 
   if (connector === 'uniswap') {
     connectorInstance = Uniswap.getInstance(chain, network);

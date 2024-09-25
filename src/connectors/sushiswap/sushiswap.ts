@@ -245,6 +245,7 @@ export class Sushiswap implements Uniswapish {
     const expectedAmount = trades[0].maximumAmountIn(
       this.getSlippagePercentage()
     );
+    console.log({ trade: trades[0], expectedAmount })
     return { trade: trades[0], expectedAmount };
   }
 

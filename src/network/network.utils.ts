@@ -17,6 +17,7 @@ export function buildConfig(
   availableNetworks: Array<AvailableNetworks>,
   chainType: string = 'EVM'
 ): NetworkConfig {
+  console.log('buildConfig', connector)
   return {
     allowedSlippage: ConfigManagerV2.getInstance().get(
       `${connector}.allowedSlippage`

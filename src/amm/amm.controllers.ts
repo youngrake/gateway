@@ -67,6 +67,10 @@ import {
   positionInfo as orcaPositionInfo,
 } from '../connectors/orca/orca.controllers';
 import {
+  price as jupiterPrice,
+  trade as jupiterTrade
+} from '../connectors/jupiter/jupiter.controllers'
+import {
   getInitializedChain,
   getConnector,
 } from '../services/connection-manager';
@@ -79,8 +83,8 @@ import {
   Tezosish,
   Uniswapish,
   UniswapLPish,
-  OrcaLPish
-} from '../services/common-interfaces';
+  OrcaLPish, JupiterLPish
+} from "../services/common-interfaces";
 import { Algorand } from '../chains/algorand/algorand';
 import { Tinyman } from '../connectors/tinyman/tinyman';
 import { Plenty } from '../connectors/plenty/plenty';
@@ -90,20 +94,22 @@ import { Carbonamm } from '../connectors/carbon/carbonAMM';
 
 export async function price(req: PriceRequest): Promise<PriceResponse> {
   const chain = await getInitializedChain<
-    Algorand | Ethereumish | Nearish | Tezosish | Osmosis
+    Algorand | Ethereumish | Nearish | Tezosish | Osmosis | Solana
   >(req.chain, req.network);
   if (chain instanceof Osmosis){
     return chain.controller.price(chain as unknown as Osmosis, req);
   }
 
-  const connector: Uniswapish | RefAMMish | Tinyman | Plenty  =
-    await getConnector<Uniswapish | RefAMMish | Tinyman | Plenty>(
+  const connector: Uniswapish | RefAMMish | Tinyman | Plenty | JupiterLPish  =
+    await getConnector<Uniswapish | RefAMMish | Tinyman | Plenty | JupiterLPish>(
       req.chain,
       req.network,
       req.connector
     );
 
-  if (connector instanceof Plenty) {
+  if (chain instanceof Solana){
+    return jupiterPrice(<Solana>chain, <JupiterLPish>connector, req);
+  } else if (connector instanceof Plenty) {
     return plentyPrice(<Tezosish>chain, connector, req);
   } else if (connector instanceof Carbonamm) {
     return carbonPrice(<Ethereumish>chain, connector, req);
@@ -119,20 +125,22 @@ export async function price(req: PriceRequest): Promise<PriceResponse> {
 
 export async function trade(req: TradeRequest): Promise<TradeResponse> {
   const chain = await getInitializedChain<
-    Algorand | Ethereumish | Nearish | Tezosish | Osmosis
+    Algorand | Ethereumish | Nearish | Tezosish | Osmosis | Solana
   >(req.chain, req.network);
   if (chain instanceof Osmosis){
     return chain.controller.trade(chain as unknown as Osmosis, req);
   }
 
-  const connector: Uniswapish | RefAMMish | Tinyman | Plenty =
-    await getConnector<Uniswapish | RefAMMish | Tinyman | Plenty>(
+  const connector: Uniswapish | RefAMMish | Tinyman | Plenty | JupiterLPish =
+    await getConnector<Uniswapish | RefAMMish | Tinyman | Plenty | JupiterLPish>(
       req.chain,
       req.network,
       req.connector
     );
 
-  if (connector instanceof Plenty) {
+  if (chain instanceof Solana){
+    return jupiterTrade(<Solana>chain, <JupiterLPish>connector, req);
+  } else if (connector instanceof Plenty) {
     return plentyTrade(<Tezosish>chain, connector, req);
   } else if (connector instanceof Carbonamm) {
     return carbonTrade(<Ethereumish>chain, connector, req);

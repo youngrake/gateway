@@ -116,6 +116,8 @@ import { CurveTrade } from '../connectors/curve/curve';
 import { SerializableExtendedPool as CosmosSerializableExtendedPool } from '../chains/osmosis/osmosis.types';
 import { CarbonTrade } from '../connectors/carbon/carbonAMM';
 import { BalancerTrade } from '../connectors/balancer/balancer';
+import { JupiterTrade } from "../connectors/jupiter/jupiter";
+import { TokenInfo } from "@solana/spl-token-registry";
 
 // TODO Check the possibility to have clob/solana/serum equivalents here
 //  Check this link https://hummingbot.org/developers/gateway/building-gateway-connectors/#5-add-sdk-classes-to-uniswapish-interface
@@ -166,7 +168,8 @@ export type UniswapishTrade =
   | TradeV2
   | CurveTrade
   | CarbonTrade
-  | BalancerTrade;
+  | BalancerTrade
+  | JupiterTrade;
 
 export type UniswapishTradeOptions =
   | MMFTradeOptions
@@ -847,11 +850,74 @@ export interface JupiterLPish {
 
   ready(): boolean;
 
-  getPositions(): Promise<PositionInfo>;
+  /**
+   * Given a token's address, return the connector's native representation of
+   * the token.
+   *
+   * @param address Token address
+   */
+  getTokenByAddress(address: string): TokenInfo;
 
   /**
-   * Given a wallet, get a list of its positions.
+   * Given the amount of `baseToken` to put into a transaction, calculate the
+   * amount of `quoteToken` that can be expected from the transaction.
    *
-   * @param wallet Wallet for the transaction
+   * This is typically used for calculating token sell prices.
+   *
+   * @param baseToken Token input for the transaction
+   * @param quoteToken Output from the transaction
+   * @param amount Amount of `baseToken` to put into the transaction
    */
+  estimateSellTrade(
+    baseToken: TokenInfo,
+    quoteToken: TokenInfo,
+    amount: string,
+    allowedSlippage?: string
+  ): Promise<JupiterTrade>;
+
+  /**
+   * Given the amount of `baseToken` desired to acquire from a transaction,
+   * calculate the amount of `quoteToken` needed for the transaction.
+   *
+   * This is typically used for calculating token buy prices.
+   *
+   * @param quoteToken Token input for the transaction
+   * @param baseToken Token output from the transaction
+   * @param amount Amount of `baseToken` desired from the transaction
+   */
+  estimateBuyTrade(
+    quoteToken: TokenInfo,
+    baseToken: TokenInfo,
+    amount: string,
+    allowedSlippage?: string
+  ): Promise<JupiterTrade>;
+
+  /**
+   * Given a wallet and a Uniswap-ish trade, try to execute it on blockchain.
+   *
+   * @param wallet Wallet
+   // * @param trade Expected trade
+   // * @param gasPrice Base gas price, for pre-EIP1559 transactions
+   // * @param uniswapRouter Router smart contract address
+   // * @param ttl How long the swap is valid before expiry, in seconds
+   // * @param abi Router contract ABI
+   // * @param gasLimit Gas limit
+   // * @param nonce (Optional) EVM transaction nonce
+   // * @param maxFeePerGas (Optional) Maximum total fee per gas you want to pay
+   // * @param maxPriorityFeePerGas (Optional) Maximum tip per gas you want to pay
+   */
+  executeTrade(
+    wallet: Wallet,
+    // trade: UniswapishTrade,
+    // gasPrice: number,
+    // uniswapRouter: string,
+    // ttl: number,
+    // abi: ContractInterface,
+    // gasLimit: number,
+    // nonce?: number,
+    // maxFeePerGas?: BigNumber,
+    // maxPriorityFeePerGas?: BigNumber,
+    // allowedSlippage?: string,
+    // poolId?: string,
+  ): Promise<Transaction | any>;
 }

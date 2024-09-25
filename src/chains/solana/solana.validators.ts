@@ -36,6 +36,7 @@ export const validateSolPrivateKey = (secretKey: string): boolean => {
     const secretKeyBytes = bs58.decode(secretKey);
     // Create a Keypair object from the secret key bytes
     Keypair.fromSecretKey(secretKeyBytes);
+    console.log('validateSolPrivateKey TRUE')
     // If no error is thrown, the string is a valid Solana private key
     return true;
   } catch (error) {

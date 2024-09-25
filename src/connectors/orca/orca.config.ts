@@ -14,7 +14,7 @@ import {
       'orca',
       ['AMM'],
       [
-        { chain: 'solana', networks: ['mainnet-beta', 'devnet'] },
+        { chain: 'solana', networks: ['mainnet', 'mainnet-beta', 'devnet'] },
       ],
       'SOLANA',
     );

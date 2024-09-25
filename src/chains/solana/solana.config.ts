@@ -21,6 +21,7 @@ export function getSolanaConfig(
   chainName: string,
   networkName: string
 ): Config {
+  console.log(`getSolanaConfig chainName: ${chainName} networkName: ${networkName}`)
   return {
     network: {
       name: networkName,

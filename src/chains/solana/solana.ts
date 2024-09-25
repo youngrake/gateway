@@ -16,8 +16,8 @@ import {
   SlotUpdateCallback,
   TokenAmount,
   TransactionResponse,
-  VersionedTransactionResponse,
-} from '@solana/web3.js';
+  VersionedTransactionResponse
+} from "@solana/web3.js";
 import bs58 from 'bs58';
 import { BigNumber } from 'ethers';
 import fse from 'fs-extra';
@@ -34,6 +34,7 @@ import { promises as fs } from 'fs';
 import axios from 'axios';
 import crypto from 'crypto';
 import { SolanaController } from './solana.controllers';
+import { Buffer } from "buffer";
 
 export class Solana implements Solanaish {
   public rpcUrl;
@@ -61,9 +62,12 @@ export class Solana implements Solanaish {
   public controller: typeof SolanaController;
 
   constructor(network: string) {
+    console.log('constructor SOLANA 123', network)
+
     this._network = network;
 
     this._config = getSolanaConfig('solana', network);
+    console.log('config', this._config)
 
     this.rpcUrl = this._config.network.nodeURL;
 
